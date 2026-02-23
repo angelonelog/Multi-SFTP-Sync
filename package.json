@@ -1,0 +1,300 @@
+{
+  "name": "multi-sftp-sync",
+  "displayName": "Multi SFTP Sync",
+  "description": "Secure multi-server SFTP sync for VS Code with host key verification, SecretStorage credentials, and safe delete guards.",
+  "version": "1.0.0",
+  "publisher": "angelonelog",
+  "icon": "icon-marketplace.png",
+  "author": {
+    "name": "YIBIN WU",
+    "email": "administer@angelonelog.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angelonelog/Multi-SFTP-Sync"
+  },
+  "bugs": {
+    "url": "https://github.com/angelonelog/Multi-SFTP-Sync/issues"
+  },
+  "homepage": "https://github.com/angelonelog/Multi-SFTP-Sync#readme",
+  "keywords": [
+    "sftp",
+    "ftp",
+    "sync",
+    "upload",
+    "download",
+    "remote",
+    "deploy",
+    "multi-server",
+    "vscode",
+    "security",
+    "ssh",
+    "secretstorage",
+    "host-key"
+  ],
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "multi-sftp-sync.uploadCurrent",
+        "title": "Multi SFTP: Upload Current File",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "multi-sftp-sync.uploadAll",
+        "title": "Multi SFTP: Upload All to Servers"
+      },
+      {
+        "command": "multi-sftp-sync.deleteCurrent",
+        "title": "Multi SFTP: Delete Current File from Servers"
+      },
+      {
+        "command": "multi-sftp-sync.downloadFile",
+        "title": "Multi SFTP: Download File from Server",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "multi-sftp-sync.downloadDirectory",
+        "title": "Multi SFTP: Download Directory from Server"
+      },
+      {
+        "command": "multi-sftp-sync.compareWithRemote",
+        "title": "Multi SFTP: Compare with Remote",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "multi-sftp-sync.openRemoteFile",
+        "title": "Multi SFTP: Open Remote File"
+      },
+      {
+        "command": "multi-sftp-sync.syncToRemote",
+        "title": "Multi SFTP: Sync Local to Remote"
+      },
+      {
+        "command": "multi-sftp-sync.syncFromRemote",
+        "title": "Multi SFTP: Sync Remote to Local"
+      },
+      {
+        "command": "multi-sftp-sync.refreshServers",
+        "title": "Refresh Server List",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "multi-sftp-sync.refreshRemoteExplorer",
+        "title": "Refresh Remote Files",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "multi-sftp-sync.uploadToServer",
+        "title": "Upload Current File to This Server",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "multi-sftp-sync.testConnection",
+        "title": "Test Connection",
+        "icon": "$(debug-disconnect)"
+      },
+      {
+        "command": "multi-sftp-sync.security.trustHostKeyNow",
+        "title": "Multi SFTP Security: Trust Host Key Now",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "multi-sftp-sync.security.removeTrustedHost",
+        "title": "Multi SFTP Security: Remove Trusted Host",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "multi-sftp-sync.security.migrateCredentialsNow",
+        "title": "Multi SFTP Security: Migrate Credentials",
+        "icon": "$(key)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "multi-sftp-sync",
+          "title": "Multi SFTP Sync",
+          "icon": "icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "multi-sftp-sync": [
+        {
+          "id": "sftpServers",
+          "name": "SFTP Servers"
+        },
+        {
+          "id": "remoteExplorer",
+          "name": "Remote File Explorer"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "multi-sftp-sync.refreshServers",
+          "when": "view == sftpServers",
+          "group": "navigation"
+        },
+        {
+          "command": "multi-sftp-sync.refreshRemoteExplorer",
+          "when": "view == remoteExplorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "multi-sftp-sync.uploadToServer",
+          "when": "view == sftpServers && viewItem == server",
+          "group": "inline"
+        },
+        {
+          "command": "multi-sftp-sync.testConnection",
+          "when": "view == sftpServers && viewItem == server",
+          "group": "inline"
+        },
+        {
+          "command": "multi-sftp-sync.downloadFile",
+          "when": "view == remoteExplorer && viewItem == remoteFile",
+          "group": "inline"
+        },
+        {
+          "command": "multi-sftp-sync.downloadDirectory",
+          "when": "view == remoteExplorer && viewItem == remoteDirectory",
+          "group": "inline"
+        },
+        {
+          "command": "multi-sftp-sync.compareWithRemote",
+          "when": "view == remoteExplorer && viewItem == remoteFile",
+          "group": "inline"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "multi-sftp-sync.uploadCurrent",
+          "group": "multi-sftp-sync@1"
+        },
+        {
+          "command": "multi-sftp-sync.downloadFile",
+          "group": "multi-sftp-sync@2"
+        },
+        {
+          "command": "multi-sftp-sync.compareWithRemote",
+          "group": "multi-sftp-sync@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Multi SFTP Sync",
+      "properties": {
+        "multiSftpSync.autoUpload": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically upload to all servers when saving a file"
+        },
+        "multiSftpSync.autoDelete": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically delete remote files when local files are deleted"
+        },
+        "multiSftpSync.autoDownload": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically download the latest remote version when opening a file"
+        },
+        "multiSftpSync.showProgress": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show upload and download progress"
+        },
+        "multiSftpSync.maxConcurrent": {
+          "type": "number",
+          "default": 5,
+          "description": "Maximum number of concurrent transfers"
+        },
+        "multiSftpSync.retryTimes": {
+          "type": "number",
+          "default": 3,
+          "description": "Retry count when a transfer fails"
+        },
+        "multiSftpSync.connectionTimeout": {
+          "type": "number",
+          "default": 10000,
+          "description": "Connection timeout in milliseconds"
+        },
+        "multiSftpSync.security.hostKeyPolicy": {
+          "type": "string",
+          "enum": [
+            "tofu",
+            "strict",
+            "off"
+          ],
+          "default": "tofu",
+          "description": "Host key validation policy: TOFU, strict, or disabled"
+        },
+        "multiSftpSync.security.autoMigrateCredentials": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically migrate plaintext password/passphrase to SecretStorage"
+        },
+        "multiSftpSync.security.trustStorePath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom path for the host trust store file. Empty uses extension global storage."
+        },
+        "multiSftpSync.safety.blockPathTraversal": {
+          "type": "boolean",
+          "default": true,
+          "description": "Block local/remote path traversal outside allowed base paths"
+        },
+        "multiSftpSync.safety.blockCriticalDeletes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Block deletes on critical remote paths"
+        },
+        "multiSftpSync.safety.criticalRemotePaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "/",
+            "/root",
+            "/etc",
+            "/var",
+            "/home"
+          ],
+          "description": "Critical remote paths that cannot be deleted when safety guard is enabled"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test:unit": "node tests/run-unit-tests.js",
+    "test:integration": "node tests/integration-scenario.js"
+  },
+  "devDependencies": {
+    "@types/node": "14.x",
+    "@types/vscode": "^1.60.0",
+    "eslint": "^8.0.0",
+    "vsce": "^2.15.0"
+  },
+  "dependencies": {
+    "micromatch": "^4.0.5",
+    "ssh2-sftp-client": "^9.1.0"
+  }
+}
